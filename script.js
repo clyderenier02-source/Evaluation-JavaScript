@@ -6,7 +6,7 @@ const produits = [
 ];
 
 // Tableau qui contiendra les produits ajoutés au panier
-let pannier = [];
+let panier = [];
 
 // Récupération du container HTML où seront affichés les produits
 const produits_container = document.getElementById("produits-container");
@@ -28,10 +28,6 @@ const affichageProduits = (produits) => {
         const div_img = document.createElement("div");
         div_img.classList.add("div_img");
 
-        // Affichage de l'id du produit
-        const id = document.createElement("p");
-        id.textContent = produit.id;
-
         // Nom du produit
         const pNom = document.createElement("h3");
         pNom.textContent = produit.nom;
@@ -49,6 +45,7 @@ const affichageProduits = (produits) => {
         const btnAjouter = document.createElement("button");
         btnAjouter.textContent = "Ajouter au panier";
 
+        // Ajout du produit au panier au clic
         btnAjouter.addEventListener("click", () => {
             ajouterAuPanier(produit);
         });
@@ -57,7 +54,6 @@ const affichageProduits = (produits) => {
         div_img.appendChild(img);
         div_container.appendChild(div_img);
         
-        div_container.appendChild(id);
         div_container.appendChild(pNom);
         div_container.appendChild(pPrix);
         div_container.appendChild(btnAjouter)
@@ -71,11 +67,11 @@ const affichageProduits = (produits) => {
 const ajouterAuPanier = (produit) => {
 
     // Vérifie si le produit existe déjà dans le panier
-    const existe = pannier.find(p => p.id === produit.id);
+    const existe = panier.find(p => p.id === produit.id);
 
     // Si le produit n'existe pas, on l'ajoute
     if(!existe) {
-        pannier.push(produit);
+        panier.push(produit);
         afficherPanier();
     }
 };
@@ -91,7 +87,7 @@ const afficherPanier = () => {
     panierListe.innerHTML = "";
 
     // Si le panier est vide
-    if(pannier.length === 0) {
+    if(panier.length === 0) {
         panierListe.innerHTML = "<p>Votre panier est vide.</p>";
         montantTotal.textContent = "0.00 €";
 
@@ -101,63 +97,83 @@ const afficherPanier = () => {
     let total = 0;
 
     // Parcourt les produits du panier
-    pannier.forEach(produit => {
+    panier.forEach(produit => {
 
         // Ligne affichant le produit
         const ligne = document.createElement("p");
         ligne.textContent = produit.nom + " " + produit.prix + " €";
 
-        // Bouton supprimer
+        // Création du bouton Supprimer
         const btnDelete = document.createElement("button");
         btnDelete.textContent = "Supprimer";
 
+        // Suppression du produit au clic
         btnDelete.addEventListener("click", () => {
             supprimerDuPanier(produit.id);
         });
         
-        // Ajout au DOM
+        // Ajout de la ligne et du bouton au DOM
         panierListe.appendChild(ligne);
         panierListe.appendChild(btnDelete);
 
-        // Calcul du total
+        // Ajout du prix au total
         total += produit.prix;
     });
-    // Affichage du total
+
+    // Affichage du total du panier
     montantTotal.textContent = total;
 };
 
+// Fonction pour supprimer un produit du panier
 const supprimerDuPanier = (idProduit) => {
-    pannier = pannier.filter(produit => produit.id !== idProduit);
+
+    // Supprime le produit du tableau panier
+    panier = panier.filter(produit => produit.id !== idProduit);
+
+    // Réaffiche le panier mis à jour
     afficherPanier();
 };
 
+// Validation de la commande
 const btnCommande = document.getElementById("btn-commander");
 const messageFeedback = document.getElementById("message-feedback");
 const input = document.getElementById("email-client");
 
+// Gestion du clic sur le bouton "Passer la commande"
 btnCommande.addEventListener("click", () => {
 
+    // Réinitialisation du message
     messageFeedback.textContent = "";
     messageFeedback.className = "";
 
-    if(pannier.length === 0) {
+    // Vérification si le panier est vid
+    if(panier.length === 0) {
         messageFeedback.textContent = "Votre panier est vide";
         messageFeedback.classList.add("error");
 
         return;
     }
 
+    // Récupération et validation de l'email
     const email = input.value.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if(!emailRegex.test(email)) {
-        messageFeedback.textContent = "Veuillez entrer une adresse valdie.";
+        messageFeedback.textContent = "Veuillez entrer une adresse valide.";
         messageFeedback.classList.add("error");
 
         return;
     }
-    messageFeedback.textContent = "Commande validé.";
+
+     // Message de succès
+    messageFeedback.textContent = "Commande validée.";
     messageFeedback.classList.add("success");
+
+    // Vide le panier après commande
+    panier = [];
+
+    // Met à jour l'affichage du panier
+    afficherPanier();
 });
 
 
