@@ -24,6 +24,9 @@ const affichageProduits = (produits) => {
         const div_container = document.createElement("div");
         div_container.classList.add("produit");
 
+        const div_sub_container = document.createElement("div");
+        div_sub_container.classList.add("div_sub_container");
+
         // Div pour contenir l’image
         const div_img = document.createElement("div");
         div_img.classList.add("div_img");
@@ -54,9 +57,11 @@ const affichageProduits = (produits) => {
         div_img.appendChild(img);
         div_container.appendChild(div_img);
         
-        div_container.appendChild(pNom);
-        div_container.appendChild(pPrix);
-        div_container.appendChild(btnAjouter)
+        div_sub_container.appendChild(pNom);
+        div_sub_container.appendChild(pPrix);
+        div_sub_container.appendChild(btnAjouter);
+
+        div_container.appendChild(div_sub_container);
 
         // Ajout du produit au container principal
         produits_container.appendChild(div_container);
@@ -113,8 +118,8 @@ const afficherPanier = () => {
         });
         
         // Ajout de la ligne et du bouton au DOM
+        ligne.appendChild(btnDelete);
         panierListe.appendChild(ligne);
-        panierListe.appendChild(btnDelete);
 
         // Ajout du prix au total
         total += produit.prix;

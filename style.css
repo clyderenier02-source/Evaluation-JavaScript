@@ -1,0 +1,174 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+}
+
+header {
+    background-color: #1976d2;
+    padding: 1em;
+    color: white;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#boutique h2 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+.container {
+    padding: 10px;
+}
+
+.div_sub_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.produit {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.produit h3 {
+    font-size: 1rem;
+}
+
+.div_img {
+    margin-bottom: 10px;
+}
+
+.div_img img {
+    width: 80%;
+    border-radius: 6px;
+}
+
+.produit button {
+    background-color: #4CAF50;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    color: white;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.produit button:hover {
+    background-color: #43a047;
+}
+
+#panier-section {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+#panier-section h3 {
+    margin-bottom: 10px;
+}
+
+#panier-liste p {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+#panier-liste button {
+    margin-left: 5px;
+    background-color: #DC2626;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#message-feedback {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#email-client {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#btn-commander {
+    padding: 8px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#btn-commander:hover {
+    background-color: #1565c0;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+
+@media (min-width: 1100px) {
+
+    .container {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    #boutique {
+        width: 100%;
+    }
+
+    #panier-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 20%;
+    }
+
+    .commande-box {
+        text-align: center;
+    }
+
+    /* Grille produits */
+    #produits-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    /* Cartes produits */
+    .produit {
+        flex-direction: column;
+        align-items: center;
+    }
+}
