@@ -56,6 +56,7 @@ const affichageProduits = (produits) => {
         // Construction de la carte produit
         div_img.appendChild(img);
         div_container.appendChild(div_img);
+        
         div_container.appendChild(id);
         div_container.appendChild(pNom);
         div_container.appendChild(pPrix);
@@ -80,19 +81,19 @@ const ajouterAuPanier = (produit) => {
 };
 
 // Récupération des éléments HTML du panier
-const panier_liste = document.getElementById("panier-liste");
-const montant_total = document.getElementById("montant-total");
+const panierListe = document.getElementById("panier-liste");
+const montantTotal = document.getElementById("montant-total");
 
 // Fonction pour afficher le contenu du panier
 const afficherPanier = () => {
 
     // Vide la liste du panier
-    panier_liste.innerHTML = "";
+    panierListe.innerHTML = "";
 
     // Si le panier est vide
     if(pannier.length === 0) {
-        panier_liste.innerHTML = "<p>Votre panier est vide.</p>";
-        montant_total.textContent = "0.00 €";
+        panierListe.innerHTML = "<p>Votre panier est vide.</p>";
+        montantTotal.textContent = "0.00 €";
 
         return;
     }
@@ -115,14 +116,14 @@ const afficherPanier = () => {
         });
         
         // Ajout au DOM
-        panier_liste.appendChild(ligne);
-        panier_liste.appendChild(btnDelete);
+        panierListe.appendChild(ligne);
+        panierListe.appendChild(btnDelete);
 
         // Calcul du total
         total += produit.prix;
     });
     // Affichage du total
-    montant_total.textContent = total;
+    montantTotal.textContent = total;
 };
 
 const supprimerDuPanier = (idProduit) => {
@@ -134,7 +135,30 @@ const btnCommande = document.getElementById("btn-commander");
 const messageFeedback = document.getElementById("message-feedback");
 const input = document.getElementById("email-client");
 
+btnCommande.addEventListener("click", () => {
 
+    messageFeedback.textContent = "";
+    messageFeedback.className = "";
+
+    if(pannier.length === 0) {
+        messageFeedback.textContent = "Votre panier est vide";
+        messageFeedback.classList.add("error");
+
+        return;
+    }
+
+    const email = input.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailRegex.test(email)) {
+        messageFeedback.textContent = "Veuillez entrer une adresse valdie.";
+        messageFeedback.classList.add("error");
+
+        return;
+    }
+    messageFeedback.textContent = "Commande validé.";
+    messageFeedback.classList.add("success");
+});
 
 
 // Affiche les produits au chargement de la page
