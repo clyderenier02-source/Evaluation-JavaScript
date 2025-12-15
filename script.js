@@ -40,6 +40,7 @@ const affichageProduits = (produits) => {
         const pPrix = document.createElement("p");
         pPrix.textContent = produit.prix + "€";
 
+        // Image du produit
         const img = document.createElement("img");
         img.src = produit.image;
         img.alt = "image";
@@ -48,7 +49,6 @@ const affichageProduits = (produits) => {
         const btnAjouter = document.createElement("button");
         btnAjouter.textContent = "Ajouter au panier";
 
-        // Image du produit
         btnAjouter.addEventListener("click", () => {
             ajouterAuPanier(produit);
         });
@@ -80,18 +80,18 @@ const ajouterAuPanier = (produit) => {
 };
 
 // Récupération des éléments HTML du panier
-const pannier_liste = document.getElementById("panier-liste");
+const panier_liste = document.getElementById("panier-liste");
 const montant_total = document.getElementById("montant-total");
 
 // Fonction pour afficher le contenu du panier
 const afficherPanier = () => {
 
     // Vide la liste du panier
-    pannier_liste.innerHTML = "";
+    panier_liste.innerHTML = "";
 
     // Si le panier est vide
     if(pannier.length === 0) {
-        pannier_liste.innerHTML = "<p>Votre panier est vide.</p>";
+        panier_liste.innerHTML = "<p>Votre panier est vide.</p>";
         montant_total.textContent = "0.00 €";
 
         return;
@@ -106,13 +106,17 @@ const afficherPanier = () => {
         const ligne = document.createElement("p");
         ligne.textContent = produit.nom + " " + produit.prix + " €";
 
-        // Bouton supprimer (pas encore fonctionnel)
+        // Bouton supprimer
         const btnDelete = document.createElement("button");
         btnDelete.textContent = "Supprimer";
+
+        btnDelete.addEventListener("click", () => {
+            supprimerDuPanier(produit.id);
+        });
         
         // Ajout au DOM
-        pannier_liste.appendChild(ligne);
-        pannier_liste.appendChild(btnDelete);
+        panier_liste.appendChild(ligne);
+        panier_liste.appendChild(btnDelete);
 
         // Calcul du total
         total += produit.prix;
@@ -120,6 +124,18 @@ const afficherPanier = () => {
     // Affichage du total
     montant_total.textContent = total;
 };
+
+const supprimerDuPanier = (idProduit) => {
+    pannier = pannier.filter(produit => produit.id !== idProduit);
+    afficherPanier();
+};
+
+const btnCommande = document.getElementById("btn-commander");
+const messageFeedback = document.getElementById("message-feedback");
+const input = document.getElementById("email-client");
+
+
+
 
 // Affiche les produits au chargement de la page
 affichageProduits(produits);
