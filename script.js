@@ -71,15 +71,32 @@ const affichageProduits = (produits) => {
 // Fonction pour ajouter un produit au panier
 const ajouterAuPanier = (produit) => {
 
-    // Vérifie si le produit existe déjà dans le panier
+    // Vérifie si le produit existe déjà
     const existe = panier.find(p => p.id === produit.id);
 
-    // Si le produit n'existe pas, on l'ajoute
-    if(!existe) {
-        panier.push(produit);
-        afficherPanier();
+    if(existe) {
+        // Si oui, augmente la quantité
+        existe.quantite += 1;
     }
-};
+    else {
+        // Sinon, ajoute le produit au panier
+        panier.push({
+            id: produit.id,
+            nom: produit.nom,
+            prix: produit.prix,
+            quantite: 1
+        });
+    }
+
+    // Met à jour l'affichage du panier
+    afficherPanier();
+}
+
+// Supprime un produit du panier via son id
+const supprimerDuPanier = (idProduit) => {
+    panier = panier.filter(p => p.id !== idProduit);
+    afficherPanier();
+}
 
 // Récupération des éléments HTML du panier
 const panierListe = document.getElementById("panier-liste");
@@ -104,15 +121,16 @@ const afficherPanier = () => {
     // Parcourt les produits du panier
     panier.forEach(produit => {
 
+        const sousTotal = produit.prix * produit.quantite;
         // Ligne affichant le produit
         const ligne = document.createElement("p");
-        ligne.textContent = produit.nom + " " + produit.prix + " €";
+        ligne.textContent = `${produit.quantite} ${produit.nom} ${produit.prix} € total : ${sousTotal} €`;
 
         // Création du bouton Supprimer
         const btnDelete = document.createElement("button");
         btnDelete.textContent = "Supprimer";
 
-        // Suppression du produit au clic
+        // Suppression au clic
         btnDelete.addEventListener("click", () => {
             supprimerDuPanier(produit.id);
         });
@@ -122,36 +140,26 @@ const afficherPanier = () => {
         panierListe.appendChild(ligne);
 
         // Ajout du prix au total
-        total += produit.prix;
+        total += produit.prix * produit.quantite;
     });
 
     // Affichage du total du panier
     montantTotal.textContent = total;
 };
 
-// Fonction pour supprimer un produit du panier
-const supprimerDuPanier = (idProduit) => {
-
-    // Supprime le produit du tableau panier
-    panier = panier.filter(produit => produit.id !== idProduit);
-
-    // Réaffiche le panier mis à jour
-    afficherPanier();
-};
-
-// Validation de la commande
+// Récupération des éléments
 const btnCommande = document.getElementById("btn-commander");
 const messageFeedback = document.getElementById("message-feedback");
-const input = document.getElementById("email-client");
+const emailClient = document.getElementById("email-client");
 
-// Gestion du clic sur le bouton "Passer la commande"
+// Gestion du clic sur le bouton "btn-commander"
 btnCommande.addEventListener("click", () => {
 
     // Réinitialisation du message
     messageFeedback.textContent = "";
     messageFeedback.className = "";
 
-    // Vérification si le panier est vid
+    // Vérification si le panier est vide
     if(panier.length === 0) {
         messageFeedback.textContent = "Votre panier est vide";
         messageFeedback.classList.add("error");
@@ -159,11 +167,11 @@ btnCommande.addEventListener("click", () => {
         return;
     }
 
-    // Récupération et validation de l'email
-    const email = input.value.trim();
+    // Regex pour validation email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if(!emailRegex.test(email)) {
+    // Vérification email
+    if(!emailRegex.test(emailClient.value.trim())) {
         messageFeedback.textContent = "Veuillez entrer une adresse valide.";
         messageFeedback.classList.add("error");
 
